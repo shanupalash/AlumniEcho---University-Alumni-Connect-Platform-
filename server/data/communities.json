@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Tech & Innovation",
+    "description": "A hub for alumni interested in the latest tech trends, gadgets, innovations, AI, cybersecurity, and everything digital.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Programming.jpg"
+  },
+  {
+    "name": "Business & Finance",
+    "description": "Discuss industry insights, market trends, investment strategies, and share advice with other alumni professionals and executives.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Business-and-Entrepreneurship.png"
+  },
+  {
+    "name": "Startup Ideas & Innovation",
+    "description": "A community for aspiring and current entrepreneurs to share, refine, and get feedback on startup ideas, MVPs, and business models.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Art-and-Design.jpg"
+  },
+  {
+    "name": "Internship Postings & Mentorship",
+    "description": "Help current students and fellow alumni by sharing internship openings, career tips, and mentorship opportunities.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Education.jpg"
+  },
+  {
+    "name": "Placement Guidance & Job Support",
+    "description": "A resource center for final-year students and young alumni to get placement tips, resume reviews, mock interviews, and job leads.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Fashion.jpg"
+  },
+  {
+    "name": "College Life & Activities",
+    "description": "Celebrate the vibrant campus life! Share stories, photos, fests, clubs, and everything that made college memorable.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Travel.jpg"
+  },
+  {
+    "name": "Professional Development & Careers",
+    "description": "A space for job seekers, professionals, and recruiters to share opportunities, host webinars, and mentor each other.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Business-and-Entrepreneurship.png"
+  },
+  {
+    "name": "Alumni Events & Reunions",
+    "description": "Stay informed about upcoming alumni events, virtual gatherings, and reunions. Coordinate meetups in your area!",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Fashion.jpg"
+  },
+  {
+    "name": "Women in Leadership",
+    "description": "A supportive community for female alumni leaders and professionals to share insights, mentorship, and success stories.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Business-and-Entrepreneurship.png"
+  },
+  {
+    "name": "Campus Memories",
+    "description": "Take a trip down memory lane—share photos, stories, and relive unforgettable moments from your university days.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Travel.jpg"
+  },
+  {
+    "name": "Volunteering & Social Impact",
+    "description": "For alumni passionate about giving back—share opportunities, organize drives, and collaborate on social initiatives.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Art-and-Design.jpg"
+  },
+  {
+    "name": "Faculty & Research Connect",
+    "description": "A space for academic alumni and faculty to share research work, collaborate on publications, or discuss academic developments.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Education.jpg"
+  },
+  {
+    "name": "Alumni Abroad",
+    "description": "For alumni living overseas—network, share tips on life in your country, and connect with others in your region.",
+    "banner": "https://raw.githubusercontent.com/nz-m/public-files/main/banners/Travel.jpg"
+  }
+]
