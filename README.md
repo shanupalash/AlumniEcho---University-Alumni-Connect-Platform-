@@ -20,7 +20,7 @@ Frontend:
 
 * React.js
 * HTML5, CSS3
-* Bootstrap / Tailwind CSS
+* Tailwind CSS
 
 Backend:
 
@@ -29,7 +29,7 @@ Backend:
 
 Database:
 
-MongoDB / MySQL *(Choose based on your implementation)*
+MongoDB 
 
 Other Tools:
 
