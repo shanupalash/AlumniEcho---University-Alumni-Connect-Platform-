@@ -1,5 +1,5 @@
 {
-  "name": "socialecho",
+  "name": "AlumniEcho",
   "version": "1.0.0",
   "description": "A social networking platform",
   "main": "app.js",
@@ -8,7 +8,7 @@
     "start": "nodemon app.js",
     "production": "node app.js"
   },
-  "author": "Neaz",
+  "author": "palash",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.4.0",

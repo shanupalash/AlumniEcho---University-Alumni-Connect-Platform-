@@ -67,7 +67,7 @@ const MainSection = () => {
 
   if (isLoading || !communityData || !communityPosts) {
     return (
-      <div className="main-section flex items-center justify-center h-screen">
+      <div className="main-section flex h-screen items-center justify-center">
         <CommonLoading />
       </div>
     );
@@ -75,39 +75,39 @@ const MainSection = () => {
 
   return (
     <div className="flex flex-col">
-      <ul className="flex">
+      <ul className="flex border-b border-gray-200">
         <li
-          className={`${
+          className={`flex-1 cursor-pointer px-4 py-3 text-center text-sm font-semibold ${
             activeTab === "All posts"
-              ? "border-blue-500 bg-primary rounded-md text-white"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium`}
+              ? "rounded-t-lg bg-blue-600 text-white"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+          } transition duration-300`}
           onClick={() => setActiveTab("All posts")}
         >
-          All post
+          All Posts
         </li>
         <li
-          className={`${
+          className={`flex-1 cursor-pointer px-4 py-3 text-center text-sm font-semibold ${
             activeTab === "You're following"
-              ? "border-blue-500 bg-primary rounded-md text-white"
-              : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-          } flex-1 cursor-pointer text-center py-2 px-1 border-b-2 font-medium`}
+              ? "rounded-t-lg bg-blue-600 text-white"
+              : "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
+          } transition duration-300`}
           onClick={() => setActiveTab("You're following")}
         >
-          You're following
+          You're Following
         </li>
       </ul>
-      <div className="mt-4 flex flex-col gap-4">
+      <div className="mt-6 flex flex-col gap-6">
         {activeTab === "All posts" && (
           <>
-            <div className="mb-4">
+            <div className="mb-6">
               <PostForm
                 communityId={communityData._id}
                 communityName={communityData.name}
               />
             </div>
             {postError && (
-              <div className="text-red-500 bg-red-100 border border-red-500 p-3 rounded-md text-center mx-auto">
+              <div className="form-error rounded-lg border border-red-300 bg-red-50 p-4 text-center">
                 {postError}
               </div>
             )}
@@ -115,7 +115,7 @@ const MainSection = () => {
             <div>{memoizedCommunityPosts}</div>
             {communityPosts.length < totalCommunityPosts && (
               <button
-                className="bg-primary hover:bg-blue-700 text-sm text-white font-semibold rounded-md w-full p-2 my-3"
+                className="form-button my-4"
                 onClick={handleLoadMore}
                 disabled={isLoadMoreLoading}
               >

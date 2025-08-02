@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,25 +6,31 @@
 
 * {
   font-family: "Inter", sans-serif;
-}
-*::-webkit-scrollbar {
-  width: 10px;
-}
-
-*::-webkit-scrollbar-track {
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(to bottom, #0070ff, #00d2ff, #0070ff);
-  border-radius: 10px;
-  border: 2px solid #ffff;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: #f7fafc;
+  background-color: #f9fafb; /* Softer background color */
+  color: #1f2937; /* Darker text for better contrast */
 }
 
+/* Scrollbar Styling */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #60a5fa);
+  border-radius: 8px;
+  border: 2px solid #f9fafb;
+}
+
+/* Tooltip Styling */
 .tooltip {
   position: relative;
   display: inline-block;
@@ -34,25 +40,27 @@ body {
   visibility: hidden;
   max-width: max-content;
   height: auto;
-  background-color: #008cff;
+  background-color: #1e40af;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 5px;
+  padding: 6px 12px;
   position: absolute;
-  z-index: 1;
-  bottom: 125%;
+  z-index: 10;
+  bottom: 130%;
   left: 50%;
   transform: translateX(-50%);
   font-size: 12px;
+  font-weight: 500;
   white-space: nowrap;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
 }
 
 .tooltip .tooltiptext::after {
@@ -63,57 +71,63 @@ body {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent;
-  border-top-color: #008cff;
-  transition: opacity 0.3s ease-in-out;
+  border-color: #1e40af transparent transparent transparent;
 }
 
-.tooltip:hover .tooltiptext::after {
-  opacity: 1;
-}
-
-.h-screen-20 {
-  height: calc(100vh - 5rem);
-}
-
-.main-section {
-  @apply mx-2 md:col-span-2 rounded-md mt-1;
-}
-
-.leftbar {
-  @apply w-2/3 md:block md:w-full md:col-span-1 bg-white fixed md:sticky top-20 pt-5 h-[85vh] rounded-md border;
-}
-
-.rightbar {
-  @apply hidden md:block md:col-span-1 bg-white sticky top-20 h-[85vh] p-5 rounded-md border;
-}
+/* Loader Styling */
 .loader {
-  width: 20px;
-  height: 20px;
-  border: 3px dotted #0ac9ff;
+  width: 24px;
+  height: 24px;
+  border: 3px dotted #3b82f6;
   border-radius: 50%;
   display: inline-block;
   position: relative;
   box-sizing: border-box;
   animation: rotation 2s linear infinite;
 }
+
 .loader::after {
   content: "";
-  box-sizing: border-box;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   margin: auto;
-  border: 3px dotted #197fc7;
-  width: 12px;
-  height: 12px;
+  border: 3px dotted #60a5fa;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   animation: rotationBack 1s linear infinite;
   transform-origin: center center;
 }
 
+.admin-loader {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-loader:before,
+.admin-loader:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #3b82f6;
+  transform: translate(-50%, 100%) scale(0);
+  animation: push 2s infinite ease-in;
+}
+
+.admin-loader:after {
+  animation-delay: 1s;
+}
+
+/* Animations */
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -122,6 +136,7 @@ body {
     transform: rotate(360deg);
   }
 }
+
 @keyframes rotationBack {
   0% {
     transform: rotate(0deg);
@@ -130,28 +145,7 @@ body {
     transform: rotate(-360deg);
   }
 }
-.admin-loader {
-  width: 84px;
-  height: 84px;
-  position: relative;
-  overflow: hidden;
-}
-.admin-loader:before,
-.admin-loader:after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #0ac9ff;
-  transform: translate(-50%, 100%) scale(0);
-  animation: push 2s infinite ease-in;
-}
-.admin-loader:after {
-  animation-delay: 1s;
-}
+
 @keyframes push {
   0% {
     transform: translate(-50%, 100%) scale(1);
@@ -168,4 +162,75 @@ body {
   100% {
     transform: translate(-50%, -50%) scale(0);
   }
+}
+
+/* Custom Utility Classes */
+.h-screen-20 {
+  height: calc(100vh - 5rem);
+}
+
+.main-section {
+  @apply mx-2 mt-2 rounded-lg bg-white p-4 shadow-md md:col-span-2;
+}
+
+.leftbar {
+  @apply fixed top-20 h-[85vh] w-3/4 rounded-lg border bg-white p-6 shadow-md md:sticky md:col-span-1 md:block md:w-full;
+}
+
+.rightbar {
+  @apply sticky top-20 hidden h-[85vh] rounded-lg border bg-white p-6 shadow-md md:col-span-1 md:block;
+}
+
+/* Form Input Styling */
+.form-input {
+  @apply block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 transition duration-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.form-input-with-icon {
+  @apply block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-16 pr-3 text-sm text-gray-700 transition duration-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.form-label {
+  @apply mb-2 block text-sm font-semibold text-gray-700;
+}
+
+.form-error {
+  @apply mt-2 text-sm font-medium text-red-600;
+}
+
+.form-button {
+  @apply w-full rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Comment Sidebar Specific Styling */
+.comment-sidebar {
+  @apply sticky top-20 col-span-1 h-[85vh] overflow-y-auto rounded-lg border bg-white p-6 shadow-md;
+}
+
+.comment-card {
+  @apply flex flex-col border-b border-gray-200 bg-white p-4 transition duration-300 hover:bg-gray-50;
+}
+
+.comment-avatar {
+  @apply mr-3 h-10 w-10 rounded-full object-cover;
+}
+
+.comment-username {
+  @apply text-base font-semibold text-gray-800 hover:underline;
+}
+
+.comment-timestamp {
+  @apply text-xs text-gray-500;
+}
+
+.comment-content {
+  @apply mt-2 whitespace-normal break-words text-sm text-gray-700;
+}
+
+.no-comments {
+  @apply flex h-full flex-col items-center justify-center text-gray-600;
+}
+
+.no-comments-icon {
+  @apply mb-4 h-16 w-16 text-gray-400;
 }

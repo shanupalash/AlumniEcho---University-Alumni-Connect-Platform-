@@ -38,61 +38,73 @@ const AdminSignIn = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="mx-auto w-full max-w-sm overflow-hidden rounded-md bg-white shadow-md">
-        <div className="px-6 py-4">
-          <div className="mx-auto flex justify-center">
-            <img className="h-5 w-auto" src={logo} alt="" />
+    <section className="flex min-h-screen items-center justify-center bg-gray-50 py-12">
+      <div className="mx-auto w-full max-w-sm">
+        <div className="rounded-lg bg-white p-8 shadow-lg">
+          <div className="mb-6 flex justify-center">
+            <img className="h-8 w-auto" src={logo} alt="Logo" />
           </div>
 
-          <p className="mt-1 text-center text-gray-500">Sign in as admin</p>
+          <h2 className="mb-4 text-center text-lg font-semibold text-gray-800">
+            Sign in as Admin
+          </h2>
+
           <form>
-            <div className="mt-4 w-full">
+            <div className="mb-4">
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
               <input
                 onChange={handleUsernameChange}
-                className="mt-2 block w-full rounded-md border bg-white px-4 py-2 text-gray-700 placeholder-gray-500  focus:border-blue-400  focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                className="form-input"
                 type="text"
                 placeholder="Username"
                 aria-label="Username"
               />
             </div>
-            <div className="mt-4 w-full">
+            <div className="mb-6">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
               <input
                 onChange={handlePasswordChange}
-                className="mt-2 block w-full rounded-md border bg-white px-4 py-2 text-gray-700 placeholder-gray-500  focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                className="form-input"
                 type="password"
                 placeholder="Password"
                 aria-label="Password"
               />
             </div>
             {signInError && (
-              <div className="relative mt-4 flex items-center justify-between rounded-md border border-red-400 bg-red-100 px-4 py-3 text-red-700">
-                <span className="block sm:inline">{signInError}</span>
+              <div className="mb-6 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {signInError}
               </div>
             )}
 
-            <div className="mt-4 flex items-center justify-between">
-              <Link to="/">
-                <IoIosArrowRoundBack className="mr-2 inline-block h-4 w-4" />
+            <div className="flex items-center justify-between">
+              <Link
+                to="/"
+                className="flex items-center text-sm text-gray-600 transition duration-300 hover:text-blue-600"
+              >
+                <IoIosArrowRoundBack className="mr-2 h-5 w-5" />
                 Back to home
               </Link>
               <button
                 disabled={signingIn}
                 type="submit"
                 onClick={(e) => handleSubmit(e)}
-                className="transform rounded-md bg-blue-500 px-6 py-2 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                className="form-button"
               >
                 {signingIn ? (
-                  <ButtonLoadingSpinner loadingText={"Signing in..."} />
+                  <ButtonLoadingSpinner loadingText="Signing in..." />
                 ) : (
-                  "Sign in"
+                  "Sign In"
                 )}
               </button>
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

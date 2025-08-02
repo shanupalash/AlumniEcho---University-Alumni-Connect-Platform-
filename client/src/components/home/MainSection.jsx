@@ -11,11 +11,7 @@ import Home from "../../assets/home.jpg";
 const MemoizedPost = memo(Post);
 
 const LoadMoreButton = ({ onClick, isLoading }) => (
-  <button
-    className="bg-primary hover:bg-blue-700 text-sm text-white font-semibold rounded-md w-full p-2 my-3"
-    onClick={onClick}
-    disabled={isLoading}
-  >
+  <button className="form-button my-4" onClick={onClick} disabled={isLoading}>
     {isLoading ? "Loading..." : "Load More Posts"}
   </button>
 );
@@ -54,7 +50,7 @@ const MainSection = ({ userData }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         <CommonLoading />
       </div>
     );
@@ -71,11 +67,16 @@ const MainSection = ({ userData }) => {
       )}
 
       {posts.length === 0 && (
-        <div className="text-center text-gray-700 flex justify-center items-center flex-col">
-          <p className="py-5 font-semibold">
+        <div className="flex flex-col items-center justify-center p-6 text-center text-gray-600">
+          <p className="py-4 text-base font-medium">
             No posts to show. Join a community and post something.
           </p>
-          <img loading="lazy" src={Home} alt="no post" />
+          <img
+            loading="lazy"
+            src={Home}
+            alt="no post"
+            className="max-w-xs rounded-lg shadow-md"
+          />
         </div>
       )}
     </>

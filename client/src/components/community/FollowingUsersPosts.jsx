@@ -44,12 +44,17 @@ const FollowingUsersPosts = ({ communityData }) => {
           {followingUsersPosts.length > 0 ? (
             <div>{memoizedFollowingUsersPost}</div>
           ) : (
-            <div className="text-center flex justify-center items-center flex-col">
-              <p className="py-5 text-gray-500">
+            <div className="flex flex-col items-center justify-center p-6 text-center">
+              <p className="py-4 text-base font-medium text-gray-600">
                 None of your following users have posted anything yet. Check
                 back later!
               </p>
-              <img loading="lazy" src={NoPost} alt="no post" />
+              <img
+                loading="lazy"
+                src={NoPost}
+                alt="no post"
+                className="max-w-xs rounded-lg shadow-md"
+              />
             </div>
           )}
         </>

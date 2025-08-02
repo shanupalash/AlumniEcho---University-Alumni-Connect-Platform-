@@ -134,7 +134,6 @@ export const getFollowingUsersAction = () => async (dispatch) => {
   }
 };
 
-
 export const followUserAndFetchData =
   (toFollowId, currentUser) => async (dispatch) => {
     try {

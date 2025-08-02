@@ -2,6 +2,7 @@ import { useState } from "react";
 import JoinModal from "../modals/JoinModal";
 import placeholder from "../../assets/placeholder.png";
 import { MdOutlineGroupAdd } from "react-icons/md";
+
 const CommunityCard = ({ community }) => {
   const [joinModalVisibility, setJoinModalVisibility] = useState({});
 
@@ -12,28 +13,31 @@ const CommunityCard = ({ community }) => {
     }));
   };
   return (
-    <div className="px-3 py-3 rounded-md border bg-white shadow-2xl shadow-[#f2f5fc] flex justify-between">
-      <div className="w-full flex items-start">
+    <div className="rounded-lg border bg-white px-4 py-4 shadow-lg transition-shadow duration-300 hover:shadow-xl">
+      <div className="flex w-full items-start">
         <img
-          className="object-cover rounded-full w-10 h-10 mr-4"
+          className="mr-4 h-12 w-12 rounded-full object-cover"
           src={community.banner || placeholder}
           alt="community banner"
           loading="lazy"
         />
-        <div className="">
-          <h4 className="text-base font-semibold line-clamp-1">{community.name}</h4>
-          <p className="text-gray-700 ">
-            {community.members.length} members
+        <div>
+          <h4 className="line-clamp-1 text-base font-semibold text-gray-800">
+            {community.name}
+          </h4>
+          <p className="text-sm text-gray-600">
+            {community.members.length}{" "}
+            {community.members.length === 1 ? "member" : "members"}
           </p>
         </div>
       </div>
 
-      <div className="">
+      <div>
         <button
           onClick={() => toggleJoinModal(community._id, true)}
-          className="px-2.5 py-2.5 bg-primary shadow-2xl shadow-[#F3F8FF] hover:bg-transparent group hover:border rounded-xl hover:border-primary transition duration-300"
+          className="rounded-lg bg-blue-600 px-3 py-3 text-white shadow-md transition duration-300 hover:bg-blue-700"
         >
-          <MdOutlineGroupAdd className="text-lg text-white group-hover:text-primary" />
+          <MdOutlineGroupAdd className="text-lg" />
         </button>
         <JoinModal
           show={joinModalVisibility[community._id] || false}

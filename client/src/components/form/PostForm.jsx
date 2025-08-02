@@ -145,16 +145,13 @@ const PostForm = ({ communityId, communityName }) => {
         confirmationToken={confirmationToken}
       />
 
-      <form onSubmit={handleSubmit} className="border-b bg-white p-6">
+      <form className="rounded-lg border-b bg-white p-6 shadow-md">
         <div className="mb-4">
-          <label
-            htmlFor="content"
-            className="mb-2 block font-bold text-gray-700"
-          >
+          <label htmlFor="content" className="form-label">
             Share something with your community:
           </label>
           <textarea
-            className="w-full resize-none rounded-md border p-2"
+            className="form-input resize-none"
             name="content"
             id="content"
             value={formData.content}
@@ -168,11 +165,11 @@ const PostForm = ({ communityId, communityName }) => {
         <div className="mb-4">
           <label
             htmlFor="file"
-            className="mx-auto mt-6 flex cursor-pointer items-center rounded-lg border-2 border-dashed bg-white px-3 py-3 text-center"
+            className="form-label flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-center transition duration-300 hover:border-blue-500 hover:bg-blue-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-300"
+              className="mr-2 h-5 w-5 text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -184,7 +181,7 @@ const PostForm = ({ communityId, communityName }) => {
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
               />
             </svg>
-            <h2 className="mx-3 text-gray-400">Photo / Video</h2>
+            <span className="text-sm text-gray-500">Photo / Video</span>
             <input
               name="file"
               type="file"
@@ -197,15 +194,15 @@ const PostForm = ({ communityId, communityName }) => {
 
           {formData.file && (
             <div className="mt-4 flex items-center justify-between">
-              <p className="text-gray-500">{formData.file.name}</p>
+              <p className="text-sm text-gray-600">{formData.file.name}</p>
               <button
                 type="button"
                 onClick={handleRemoveFile}
-                className="text-red-500 hover:text-red-700"
+                className="text-red-600 transition duration-300 hover:text-red-800"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
+                  className="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -221,20 +218,18 @@ const PostForm = ({ communityId, communityName }) => {
             </div>
           )}
 
-          {formData.error && <p className="text-red-500">{formData.error}</p>}
+          {formData.error && <p className="form-error">{formData.error}</p>}
         </div>
 
         <button
-          className={`rounded bg-primary px-4 py-1 text-sm text-white hover:bg-blue-700 ${
-            formData.loading ? "cursor-not-allowed opacity-50" : ""
-          }`}
+          className="form-button"
           type="submit"
           disabled={formData.loading || (!formData.content && !formData.file)}
           style={{
             display: formData.content || formData.file ? "block" : "none",
           }}
         >
-          {formData.loading ? "Processing..." : "Create post"}
+          {formData.loading ? "Processing..." : "Create Post"}
         </button>
       </form>
     </>

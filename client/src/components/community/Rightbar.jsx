@@ -5,7 +5,6 @@ import LeaveModal from "../modals/LeaveModal";
 import { getCommunityAction } from "../../redux/actions/communityActions";
 import placeholder from "../../assets/placeholder.png";
 import CommonLoading from "../loader/CommonLoading";
-
 import {
   useBannerLoading,
   useIsModeratorUpdated,
@@ -49,12 +48,12 @@ const Rightbar = () => {
   }
 
   return (
-    <div className="bg-white rounded-md ">
-      <div className="flex flex-col ">
-        <h2 className="text-lg font-bold">{name}</h2>
-        <div className="flex items-center gap-2 text-primary mb-4">
-          <HiUserGroup />
-          <span className="mr-2">
+    <div className="rounded-lg bg-white p-6 shadow-md">
+      <div className="flex flex-col">
+        <h2 className="text-xl font-bold text-gray-800">{name}</h2>
+        <div className="mt-2 flex items-center gap-2 text-blue-600">
+          <HiUserGroup className="text-lg" />
+          <span className="text-sm">
             {members?.length || 0}{" "}
             {members?.length === 1 ? "member" : "members"}
           </span>
@@ -65,7 +64,7 @@ const Rightbar = () => {
         <img
           src={banner}
           alt="community banner"
-          className="w-full h-40 rounded-md object-cover mb-4"
+          className="mt-4 h-40 w-full rounded-lg object-cover shadow-sm"
           onError={(e) => {
             e.target.src = placeholder;
           }}
@@ -74,17 +73,17 @@ const Rightbar = () => {
         <img
           src={placeholder}
           alt="community banner placeholder"
-          className="w-full h-40 rounded-md object-cover mb-4"
+          className="mt-4 h-40 w-full rounded-lg object-cover shadow-sm"
         />
       )}
 
-      <h3>{description}</h3>
+      <h3 className="mt-4 text-sm text-gray-600">{description}</h3>
 
-      <div className="my-4">
+      <div className="my-6">
         {isModeratorOfThisCommunity && (
           <Link
             to={`/community/${communityName}/moderator`}
-            className="px-4 bg-primary text-white shadow-md shadow-gray-50 text-sm py-1 rounded-md flex justify-center items-center w-full my-2 hover:bg-primary-600"
+            className="form-button mb-2 block text-center"
           >
             Moderation Panel
           </Link>
@@ -93,7 +92,7 @@ const Rightbar = () => {
         {isModeratorUpdated && !isModeratorOfThisCommunity && (
           <button
             onClick={toggleLeaveModal}
-            className="px-4 shadow-md shadow-red-50 text-sm py-1 border border-red-400 hover:text-white hover:bg-red-400 text-red-400 rounded-md flex justify-center items-center w-full my-2"
+            className="block w-full rounded-lg bg-red-50 py-3 text-sm font-semibold text-red-600 shadow-md transition duration-300 hover:bg-red-100"
           >
             Leave Community
           </button>
@@ -107,12 +106,12 @@ const Rightbar = () => {
         }
       </div>
       {rules && rules.length > 0 && (
-        <div className="text-slate-900 mb-4">
-          <span className="font-bold">Community Guidelines:</span>
-          <ul className="flex flex-col gap-2 ">
+        <div className="text-gray-800">
+          <span className="text-sm font-semibold">Community Guidelines:</span>
+          <ul className="mt-2 flex flex-col gap-3">
             {rules.map((rule) => (
-              <li key={rule._id} className="flex items-start gap-2 ">
-                <HiOutlineCheckBadge className="text-lg flex-shrink-0 mt-1" />
+              <li key={rule._id} className="flex items-start gap-2 text-sm">
+                <HiOutlineCheckBadge className="mt-0.5 flex-shrink-0 text-lg text-blue-600" />
                 {rule.rule}
               </li>
             ))}

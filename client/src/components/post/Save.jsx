@@ -57,7 +57,7 @@ const Save = ({ postId }) => {
   return (
     <button
       onClick={saved ? handleUnsave : handleSave}
-      className="flex items-center gap-1 mr-2 tooltip"
+      className="tooltip mr-2 flex items-center gap-1"
       disabled={isSaving}
     >
       {isSaving ? (

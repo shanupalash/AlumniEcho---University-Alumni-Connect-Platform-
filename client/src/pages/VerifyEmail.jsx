@@ -39,13 +39,11 @@ const VerifyEmail = () => {
         setError(
           err.response.data.message || "Invalid code, please try again."
         );
-
         setLoading(false);
       });
   }, [code, email, navigate, setLoading, setError]);
 
   useEffect(() => {
-    // Automatically trigger handleVerify if both code and email are present in the URL
     if (codeFromUrl && emailFromUrl) {
       handleVerify();
     }
@@ -56,53 +54,53 @@ const VerifyEmail = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="rounded-md bg-white p-6 shadow-md">
-          <h2 className="mb-4 text-2xl font-bold">Verify your email address</h2>
+    <section className="flex min-h-screen items-center justify-center bg-gray-50 py-12">
+      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+        <h2 className="mb-4 text-xl font-bold text-gray-800">
+          Verify Your Email Address
+        </h2>
 
-          {!codeFromUrl && !emailFromUrl && (
-            <p className="mb-4">
-              A verification code was sent to your email address. Please either
-              <span className="font-bold"> follow </span>
-              the link in the email or
-              <span className="font-bold"> enter </span>
-              the code below.
-            </p>
-          )}
+        {!codeFromUrl && !emailFromUrl && (
+          <p className="mb-6 text-sm text-gray-600">
+            A verification code was sent to your email address. Please either
+            <span className="font-semibold"> follow </span>
+            the link in the email or
+            <span className="font-semibold"> enter </span>
+            the code below.
+          </p>
+        )}
 
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Verification code"
-              className="w-full rounded-lg border-2 border-gray-200 p-2"
-              value={code}
-              onChange={handleCodeChange}
-            />
-          </div>
-          {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
+        <div className="mb-4">
+          <label htmlFor="code" className="form-label">
+            Verification Code
+          </label>
+          <input
+            type="text"
+            id="code"
+            placeholder="Verification code"
+            className="form-input"
+            value={code}
+            onChange={handleCodeChange}
+          />
+        </div>
+        {error && <div className="form-error mb-4">{error}</div>}
+        <div className="flex items-center space-x-4">
           <button
             disabled={loading}
-            className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            className="form-button flex-1"
             onClick={handleVerify}
           >
-            {loading ? (
-              <LoadingSpinner loadingText={"Verifying..."} />
-            ) : (
-              "Verify"
-            )}
+            {loading ? <LoadingSpinner loadingText="Verifying..." /> : "Verify"}
           </button>
           <button
-            className="ml-4 rounded-lg bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400"
-            onClick={() => {
-              navigate("/signup");
-            }}
+            className="flex-1 rounded-lg bg-gray-200 py-3 text-sm font-semibold text-gray-800 shadow-md transition duration-300 hover:bg-gray-300"
+            onClick={() => navigate("/signup")}
           >
             Cancel
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
