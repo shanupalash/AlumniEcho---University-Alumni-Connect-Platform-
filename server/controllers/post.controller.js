@@ -1,5 +1,6 @@
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
+const { ObjectId } = require("mongoose").Types;
 dayjs.extend(relativeTime);
 const formatCreatedAt = require("../utils/timeConverter");
 
@@ -17,23 +18,46 @@ const createPost = async (req, res) => {
     const { communityId, content } = req.body;
     const { userId, file, fileUrl, fileType } = req;
 
-    const community = await Community.findOne({
-      _id: { $eq: communityId },
-      members: { $eq: userId },
+    console.log("Request body:", req.body);
+    console.log("Request userId, file, fileUrl, fileType:", {
+      userId,
+      file,
+      fileUrl,
+      fileType,
     });
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: "Authentication failed: Missing user ID" });
+    }
+
+    if (!communityId || !content) {
+      return res
+        .status(400)
+        .json({ message: "communityId and content are required" });
+    }
+
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(communityId)) {
+      return res.status(400).json({ message: "Invalid user or community ID" });
+    }
+
+    const community = await Community.findOne({
+      _id: communityId,
+      members: userId,
+    });
+
+    console.log("Community found:", community);
 
     if (!community) {
       if (file) {
         const filePath = `./assets/userFiles/${file.filename}`;
         fs.unlink(filePath, (err) => {
-          if (err) {
-            console.error(err);
-          }
+          if (err) console.error(`Error deleting file: ${err.message}`);
         });
       }
-
       return res.status(401).json({
-        message: "Unauthorized to post in this community",
+        message: `You are not a member of the community with ID ${communityId}. Please join the community to post.`,
       });
     }
 
@@ -41,8 +65,8 @@ const createPost = async (req, res) => {
       user: userId,
       community: communityId,
       content,
-      fileUrl: fileUrl ? fileUrl : null,
-      fileType: fileType ? fileType : null,
+      fileUrl: fileUrl || null,
+      fileType: fileType || null,
     });
 
     const savedPost = await newPost.save();
@@ -57,8 +81,9 @@ const createPost = async (req, res) => {
 
     res.json(post);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error creating post",
+      message: `Failed to create post: ${error.message}`,
     });
   }
 };
@@ -67,13 +92,21 @@ const confirmPost = async (req, res) => {
   try {
     const { confirmationToken } = req.params;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
     const pendingPost = await PendingPost.findOne({
       confirmationToken: { $eq: confirmationToken },
       status: "pending",
       user: userId,
     });
+
     if (!pendingPost) {
-      return res.status(404).json({ message: "Post not found" });
+      return res
+        .status(404)
+        .json({ message: "Pending post not found or already processed" });
     }
 
     const { user, community, content, fileUrl, fileType } = pendingPost;
@@ -100,8 +133,9 @@ const confirmPost = async (req, res) => {
 
     res.json(post);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error publishing post",
+      message: `Failed to confirm post: ${error.message}`,
     });
   }
 };
@@ -110,6 +144,11 @@ const rejectPost = async (req, res) => {
   try {
     const { confirmationToken } = req.params;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
     const pendingPost = await PendingPost.findOne({
       confirmationToken: { $eq: confirmationToken },
       status: "pending",
@@ -123,15 +162,21 @@ const rejectPost = async (req, res) => {
     await pendingPost.remove();
     res.status(201).json({ message: "Post rejected" });
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error rejecting post",
+      message: `Error rejecting post: ${error.message}`,
     });
   }
 };
 
 const clearPendingPosts = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const userId = req.userId;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const user = await User.findById(userId);
     if (user.role !== "moderator") {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -143,15 +188,21 @@ const clearPendingPosts = async (req, res) => {
 
     res.status(200).json({ message: "Pending posts cleared" });
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error clearing pending posts",
+      message: `Error clearing pending posts: ${error.message}`,
     });
   }
 };
+
 const getPost = async (req, res) => {
   try {
     const postId = req.params.id;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(postId) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid post or user ID" });
+    }
 
     const post = await findPostById(postId);
     if (!post) {
@@ -170,8 +221,9 @@ const getPost = async (req, res) => {
 
     res.status(200).json(post);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error getting post",
+      message: `Error getting post: ${error.message}`,
     });
   }
 };
@@ -204,6 +256,10 @@ const getPosts = async (req, res) => {
   try {
     const userId = req.userId;
     const { limit = 10, skip = 0 } = req.query;
+
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
 
     const communities = await Community.find({
       members: userId,
@@ -241,24 +297,22 @@ const getPosts = async (req, res) => {
       totalPosts,
     });
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error retrieving posts",
+      message: `Error retrieving posts: ${error.message}`,
     });
   }
 };
 
-/**
- * Retrieves the posts for a given community, including the post information, the number of posts saved by each user,
- * the user who created it, and the community it belongs to.
- *
- * @route GET /posts/community/:communityId
- */
 const getCommunityPosts = async (req, res) => {
   try {
     const communityId = req.params.communityId;
     const userId = req.userId;
-
     const { limit = 10, skip = 0 } = req.query;
+
+    if (!ObjectId.isValid(communityId) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid community or user ID" });
+    }
 
     const isMember = await Community.findOne({
       _id: communityId,
@@ -297,21 +351,21 @@ const getCommunityPosts = async (req, res) => {
       totalCommunityPosts,
     });
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error retrieving posts",
+      message: `Error retrieving posts: ${error.message}`,
     });
   }
 };
 
-/**
- * Retrieves the posts of the users that the current user is following in a given community
- *
- * @route GET /posts/:id/following
- */
 const getFollowingUsersPosts = async (req, res) => {
   try {
     const communityId = req.params.id;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(communityId) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid community or user ID" });
+    }
 
     const following = await Relationship.find({
       follower: userId,
@@ -342,8 +396,9 @@ const getFollowingUsersPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Server error",
+      message: `Server error: ${error.message}`,
     });
   }
 };
@@ -351,6 +406,11 @@ const getFollowingUsersPosts = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid post ID" });
+    }
+
     const post = await Post.findById(id);
 
     if (!post) {
@@ -364,8 +424,9 @@ const deletePost = async (req, res) => {
       message: "Post deleted successfully",
     });
   } catch (error) {
-    res.status(404).json({
-      message: "An error occurred while deleting the post",
+    console.error("Error details:", error);
+    res.status(500).json({
+      message: `An error occurred while deleting the post: ${error.message}`,
     });
   }
 };
@@ -382,14 +443,15 @@ const populatePost = async (post) => {
   };
 };
 
-/**
- * @param {string} req.params.id - The ID of the post to be liked.
- * @param {string} req.userId - The ID of the user liking the post.
- */
 const likePost = async (req, res) => {
   try {
     const id = req.params.id;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(id) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid post or user ID" });
+    }
+
     const updatedPost = await Post.findOneAndUpdate(
       {
         _id: id,
@@ -419,8 +481,9 @@ const likePost = async (req, res) => {
 
     res.status(200).json(formattedPost);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error liking post",
+      message: `Error liking post: ${error.message}`,
     });
   }
 };
@@ -429,6 +492,10 @@ const unlikePost = async (req, res) => {
   try {
     const id = req.params.id;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(id) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid post or user ID" });
+    }
 
     const updatedPost = await Post.findOneAndUpdate(
       {
@@ -457,8 +524,9 @@ const unlikePost = async (req, res) => {
 
     res.status(200).json(formattedPost);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error unliking post",
+      message: `Error unliking post: ${error.message}`,
     });
   }
 };
@@ -467,6 +535,15 @@ const addComment = async (req, res) => {
   try {
     const { content, postId } = req.body;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(postId) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid post or user ID" });
+    }
+
+    if (!content) {
+      return res.status(400).json({ message: "Comment content is required" });
+    }
+
     const newComment = new Comment({
       user: userId,
       post: postId,
@@ -475,7 +552,7 @@ const addComment = async (req, res) => {
     await newComment.save();
     await Post.findOneAndUpdate(
       {
-        _id: { $eq: postId },
+        _id: postId,
       },
       {
         $addToSet: {
@@ -487,8 +564,9 @@ const addComment = async (req, res) => {
       message: "Comment added successfully",
     });
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Error adding comment",
+      message: `Error adding comment: ${error.message}`,
     });
   }
 };
@@ -501,21 +579,14 @@ const unsavePost = async (req, res) => {
   await saveOrUnsavePost(req, res, "$pull");
 };
 
-/**
- * Saves or unsaves a post for a given user by updating the user's
- * savedPosts array in the database. Uses $addToSet or $pull operation based on the value of the operation parameter.
- *
- * @param req - The request object.
- * @param res - The response object.
- * @param {string} operation - The operation to perform, either "$addToSet" to save the post or "$pull" to unsave it.
- */
 const saveOrUnsavePost = async (req, res, operation) => {
   try {
-    /**
-     * @type {string} id - The ID of the post to be saved or unsaved.
-     */
     const id = req.params.id;
     const userId = req.userId;
+
+    if (!ObjectId.isValid(id) || !ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid post or user ID" });
+    }
 
     const update = {};
     update[operation === "$addToSet" ? "$addToSet" : "$pull"] = {
@@ -552,18 +623,21 @@ const saveOrUnsavePost = async (req, res, operation) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Server error",
+      message: `Server error: ${error.message}`,
     });
   }
 };
 
-/**
- * @route GET /posts/saved
- */
 const getSavedPosts = async (req, res) => {
   try {
     const userId = req.userId;
+
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -571,9 +645,6 @@ const getSavedPosts = async (req, res) => {
       });
     }
 
-    /**
-     * send the saved posts of the communities that the user is a member of only
-     */
     const communityIds = await Community.find({ members: userId }).distinct(
       "_id"
     );
@@ -591,33 +662,30 @@ const getSavedPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
+    console.error("Error details:", error);
     res.status(500).json({
-      message: "Server error",
+      message: `Server error: ${error.message}`,
     });
   }
 };
 
-/**
- * Retrieves up to 10 posts of the public user that are posted in the communities
- * that both the public user and the current user are members of.
- *
- * @route GET /posts/:publicUserId/userPosts
- *
- * @param req.userId - The id of the current user.
- *
- * @param {string} req.params.publicUserId - The id of the public user whose posts to retrieve.
- */
 const getPublicPosts = async (req, res) => {
   try {
     const publicUserId = req.params.publicUserId;
     const currentUserId = req.userId;
+
+    if (!ObjectId.isValid(publicUserId) || !ObjectId.isValid(currentUserId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
 
     const isFollowing = await Relationship.exists({
       follower: currentUserId,
       following: publicUserId,
     });
     if (!isFollowing) {
-      return null;
+      return res.status(403).json({
+        message: "You must follow the user to view their posts",
+      });
     }
 
     const commonCommunityIds = await Community.find({
@@ -641,7 +709,8 @@ const getPublicPosts = async (req, res) => {
 
     res.status(200).json(formattedPosts);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error details:", error);
+    res.status(500).json({ message: `Server error: ${error.message}` });
   }
 };
 

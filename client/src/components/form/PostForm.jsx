@@ -25,27 +25,29 @@ const PostForm = ({ communityId, communityName }) => {
     loading: false,
   });
 
-  const { isPostInappropriate, postCategory, confirmationToken } = useSelector(
-    (state) => ({
-      isPostInappropriate: state.posts?.isPostInappropriate,
-      postCategory: state.posts?.postCategory,
-      confirmationToken: state.posts?.confirmationToken,
-    })
-  );
+  const {
+    isPostInappropriate,
+    postCategory,
+    confirmationToken,
+    error: serverError,
+  } = useSelector((state) => ({
+    isPostInappropriate: state.posts?.isPostInappropriate,
+    postCategory: state.posts?.postCategory,
+    confirmationToken: state.posts?.confirmationToken,
+    error: state.posts?.error,
+  }));
 
   const handleContentChange = (event) => {
     setFormData({
       ...formData,
       content: event.target.value,
+      error: "",
     });
   };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-    if (
-      selectedFile &&
-      selectedFile.size <= 50 * 1024 * 1024 // 50MB
-    ) {
+    if (selectedFile && selectedFile.size <= 50 * 1024 * 1024) {
       setFormData({
         ...formData,
         file: selectedFile,
@@ -60,11 +62,27 @@ const PostForm = ({ communityId, communityName }) => {
     }
   };
 
+  const handleRemoveFile = () => {
+    setFormData({
+      ...formData,
+      file: null,
+      error: "",
+    });
+  };
+
   useEffect(() => {
     if (isPostInappropriate) setShowInappropriateContentModal(true);
     if (postCategory) setShowTopicConflictModal(true);
     if (confirmationToken) setShowEligibilityDetectionFailModal(true);
-  }, [isPostInappropriate, postCategory, confirmationToken]);
+    if (serverError) {
+      setFormData((prev) => ({
+        ...prev,
+        error:
+          serverError.message || "Failed to create post. Please try again.",
+        loading: false,
+      }));
+    }
+  }, [isPostInappropriate, postCategory, confirmationToken, serverError]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -83,11 +101,12 @@ const PostForm = ({ communityId, communityName }) => {
     newPost.append("content", content);
     newPost.append("communityId", communityId);
     newPost.append("communityName", communityName);
-    newPost.append("file", file);
+    if (file) newPost.append("file", file);
 
     setFormData({
       ...formData,
       loading: true,
+      error: "",
     });
 
     try {
@@ -107,14 +126,6 @@ const PostForm = ({ communityId, communityName }) => {
     }
   };
 
-  const handleRemoveFile = () => {
-    setFormData({
-      ...formData,
-      file: null,
-      error: "",
-    });
-  };
-
   return (
     <>
       <InappropriatePostModal
@@ -123,7 +134,7 @@ const PostForm = ({ communityId, communityName }) => {
           dispatch(clearCreatePostFail());
         }}
         showInappropriateContentModal={showInappropriateContentModal}
-        contentType={"post"}
+        contentType="post"
       />
 
       <TopicConflictModal
@@ -145,7 +156,10 @@ const PostForm = ({ communityId, communityName }) => {
         confirmationToken={confirmationToken}
       />
 
-      <form className="rounded-lg border-b bg-white p-6 shadow-md">
+      <form
+        className="rounded-lg border-b bg-white p-6 shadow-md"
+        onSubmit={handleSubmit}
+      >
         <div className="mb-4">
           <label htmlFor="content" className="form-label">
             Share something with your community:
@@ -158,7 +172,7 @@ const PostForm = ({ communityId, communityName }) => {
             onChange={handleContentChange}
             minLength={10}
             maxLength={3000}
-            required
+            placeholder="What's on your mind?"
           />
         </div>
 
@@ -181,12 +195,14 @@ const PostForm = ({ communityId, communityName }) => {
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
               />
             </svg>
-            <span className="text-sm text-gray-500">Photo / Video</span>
+            <span className="text-sm text-gray-500">
+              Upload Photo/Video (max 50MB)
+            </span>
             <input
               name="file"
               type="file"
               id="file"
-              accept="image/*, video/*"
+              accept="image/*,video/*"
               onChange={handleFileChange}
               className="hidden"
             />
@@ -218,18 +234,38 @@ const PostForm = ({ communityId, communityName }) => {
             </div>
           )}
 
-          {formData.error && <p className="form-error">{formData.error}</p>}
+          {formData.error && (
+            <p className="form-error mt-2 text-red-600">{formData.error}</p>
+          )}
         </div>
 
         <button
-          className="form-button"
+          className="form-button rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-400"
           type="submit"
           disabled={formData.loading || (!formData.content && !formData.file)}
-          style={{
-            display: formData.content || formData.file ? "block" : "none",
-          }}
         >
-          {formData.loading ? "Processing..." : "Create Post"}
+          {formData.loading ? (
+            <span className="flex items-center">
+              <svg className="mr-2 h-5 w-5 animate-spin" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                />
+              </svg>
+              Processing...
+            </span>
+          ) : (
+            "Create Post"
+          )}
         </button>
       </form>
     </>
