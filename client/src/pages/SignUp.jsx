@@ -30,7 +30,7 @@ const SignUpNew = () => {
   const handleNameChange = (e) => setName(e.target.value);
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setIsModerator(e.target.value.includes("mod.socialecho.com"));
+    setIsModerator(e.target.value.includes("mod.AlumniEcho.com"));
   };
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleAvatarChange = (e) => {

@@ -3,8 +3,8 @@
  * @param {string} createdAt - The date string to format (in ISO format).
  * @returns {string} The formatted date string.
  * @example
- * formatCreatedAt("2023-04-18T13:22:43.115+00:00");
- * // returns "April 18th, 2023 7:22 PM"
+ * formatCreatedAt("2025-07-18T13:22:43.115+00:00");
+ * // returns "July 18th, 2025 7:22 PM"
  */
 const formatCreatedAt = (createdAt) => {
   const date = new Date(createdAt);

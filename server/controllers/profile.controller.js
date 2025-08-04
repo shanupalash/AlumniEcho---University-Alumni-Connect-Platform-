@@ -261,7 +261,7 @@ const addUser = async (req, res, next) => {
       : defaultAvatar;
 
     const emailDomain = req.body.email.split("@")[1];
-    const role = emailDomain === "mod.socialecho.com" ? "moderator" : "general";
+    const role = emailDomain === "mod.AlumniEcho.com" ? "moderator" : "general";
 
     const newUser = new User({
       name: req.body.name,
