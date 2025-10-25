@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = process.env.REACT_APP_API_URL || "https://alumniecho-university-alumni-connect.onrender.com" ;
 const ADMIN_URL = `${BASE_URL}/admin`;
 
 const authInterceptor = (req) => {
