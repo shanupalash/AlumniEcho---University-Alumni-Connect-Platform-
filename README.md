@@ -1,6 +1,6 @@
 🎓 AlumniEcho – University Alumni Connect Platform
 
-<img src="https://github.com/user-attachments/assets/64595353-3992-4569-bfe3-5c9a9937db77" alt="logo" height="150"/>
+<img src="https://github.com/user-attachments/assets/64595353-3992-4569-bfe3-5c9a9937db77" alt="logo" height="500"/>
 
 AlumniEcho is a web-based platform designed to bridge the gap between university alumni and current students. It provides a dynamic space for networking, mentorship, event participation, and professional growth.
 
