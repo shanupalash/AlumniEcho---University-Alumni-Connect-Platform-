@@ -1,5 +1,7 @@
 🎓 AlumniEcho – University Alumni Connect Platform
 
+<img width="1839" height="1227" alt="image" src="https://github.com/user-attachments/assets/64595353-3992-4569-bfe3-5c9a9937db77" />
+
 AlumniEcho is a web-based platform designed to bridge the gap between university alumni and current students. It provides a dynamic space for networking, mentorship, event participation, and professional growth.
 
 ## 🌟 Features
@@ -37,6 +39,18 @@ Other Tools:
 * Git & GitHub
 * RESTful APIs
 
+  Use Case Diagram :
+
+  <img width="2410" height="1567" alt="image" src="https://github.com/user-attachments/assets/2a7b93f2-a425-430e-98ab-034525b574b9" />
+
+  Data Flow Diagram :
+
+  <img width="1477" height="1230" alt="image" src="https://github.com/user-attachments/assets/6668d57e-9a4d-4360-a95c-fc4033bae917" />
+
+Pages :
+
+
+
   <img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/705f8406-1fc7-4963-8eb5-d7f1a5d63cfb" />
   <img width="1919" height="915" alt="image" src="https://github.com/user-attachments/assets/a84591eb-92d6-420a-bbb2-00dd28ecedcd" />
   <img width="1919" height="900" alt="image" src="https://github.com/user-attachments/assets/90d3cfd2-bfa3-45a5-96b8-93b2e6ac67d5" />
@@ -46,5 +60,4 @@ Other Tools:
 
 
 
- <img width="2957" height="1426" alt="image" src="https://github.com/user-attachments/assets/bb8b237b-663c-47e5-8583-817742c496fc" />
 
