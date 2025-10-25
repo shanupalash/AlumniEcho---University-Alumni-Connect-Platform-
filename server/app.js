@@ -26,7 +26,13 @@ db.connect().catch((err) =>
   console.error("Error connecting to database:", err)
 );
 
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ["https://alumni-echo-university-alumni-connect-platform-he01c40x1.vercel.app", "https://alumniecho-university-alumni-connect.onrender.com"],
+    credentials: true,
+  })
+);
 app.use(morgan("dev"));
 app.use("/assets/userFiles", express.static(__dirname + "/assets/userFiles"));
 app.use(
