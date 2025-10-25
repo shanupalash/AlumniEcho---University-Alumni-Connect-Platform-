@@ -36,3 +36,15 @@ Other Tools:
 * JWT Authentication
 * Git & GitHub
 * RESTful APIs
+
+  <img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/705f8406-1fc7-4963-8eb5-d7f1a5d63cfb" />
+  <img width="1919" height="915" alt="image" src="https://github.com/user-attachments/assets/a84591eb-92d6-420a-bbb2-00dd28ecedcd" />
+  <img width="1919" height="900" alt="image" src="https://github.com/user-attachments/assets/90d3cfd2-bfa3-45a5-96b8-93b2e6ac67d5" />
+  <img width="1918" height="916" alt="image" src="https://github.com/user-attachments/assets/e4357835-8db7-4204-bf56-47beee4f2ea8" />
+
+
+
+
+
+ <img width="2957" height="1426" alt="image" src="https://github.com/user-attachments/assets/bb8b237b-663c-47e5-8583-817742c496fc" />
+
